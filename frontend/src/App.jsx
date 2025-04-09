@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from './Components/sidebar';
 import Tasks from './Screens/task';
 import SpecificTask from './Screens/specificTask';
+import { BackendProvider } from './BackendContext';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
   }, [user])
 
   return (
+    <BackendProvider>
     <Router>
         {(user && user._id)?
         (<>
@@ -34,6 +36,7 @@ function App() {
         </Routes>)}
         <ToastContainer/>
     </Router>
+    </BackendProvider>
   )
 }
 

@@ -7,9 +7,11 @@ import deleteTask from "../assets/deleteTask.svg"
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BackendURL } from "../BackendContext";
 
 const SpecificTask = () => {
-
+    
+    const API = BackendURL();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const location = useLocation()
@@ -32,7 +34,7 @@ const SpecificTask = () => {
 
 
     const TaskDelete = taskID => {
-        axios.delete(`http://localhost:9001/User/DeleteTask/${taskID}`)
+        axios.delete(`${API}/User/DeleteTask/${taskID}`)
         .then(response => {
             if(response.data.message){
                 toast.success(response.data.message, {autoClose:2500})
@@ -50,7 +52,7 @@ const SpecificTask = () => {
     }
 
     const TaskEdit = taskId => {
-        axios.put(`http://localhost:9001/User/EditTask/${taskId}`, updateTask)
+        axios.put(`${API}/User/EditTask/${taskId}`, updateTask)
         .then(response => {
             if(response.data.message === "Task details has updated successfully"){
                 toast.success(response.data.message, {autoClose:2500})
@@ -68,7 +70,7 @@ const SpecificTask = () => {
     }
 
     const UpdateStatus = taskId => {
-        axios.put(`http://localhost:9001/User/UpdateTaskStatus/${taskId}`)
+        axios.put(`${API}/User/UpdateTaskStatus/${taskId}`)
             .then(response => {
                 if(response.data.message === "Task status updated"){
                     toast.success(response.data.message, {autoClose:2500})

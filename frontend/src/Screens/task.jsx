@@ -6,9 +6,11 @@ import viewtask from "../assets/viewtask.svg"
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BackendURL } from "../BackendContext";
 
 const Tasks = ({user}) => {
     
+    const API = BackendURL();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [taskDetails, setDetails] = useState([])
@@ -27,7 +29,7 @@ const Tasks = ({user}) => {
     }
 
     const CreateTask = () => {
-        axios.post(`http://localhost:9001/User/AddTask/${user._id}`, task)
+        axios.post(`${API}/User/AddTask/${user._id}`, task)
         .then(response => {
             if(response.data.message === "Task has been added successfully"){
                 toast.success(response.data.message, {autoClose:2500})
@@ -52,7 +54,7 @@ const Tasks = ({user}) => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:9001/User/GetTasks/${user._id}`)
+        axios.get(`${API}/User/GetTasks/${user._id}`)
         .then(response => { setDetails(response.data)})
         .catch(err => console.error(err));
     }, [user._id]);

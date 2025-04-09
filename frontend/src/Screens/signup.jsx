@@ -3,9 +3,11 @@ import "./sign.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { BackendURL } from "../BackendContext";
 
 const SignUp = ({setLoginUser}) => {
 
+    const API = BackendURL();
     const navigate = useNavigate();
     const [toggleForm, setToggle] = useState(false)
     const [credentials, setCredentials] = useState({
@@ -23,7 +25,7 @@ const SignUp = ({setLoginUser}) => {
     }
 
     const CreateAccount = () => {
-        axios.post(`http://localhost:9001/User/Signup`, credentials)
+        axios.post(`${API}/User/Signup`, credentials)
         .then(response => {
             if(response.data.message === "You are registered successfully"){
                 toast.success(response.data.message, {autoClose:2500})
@@ -47,7 +49,7 @@ const SignUp = ({setLoginUser}) => {
     }
 
     const Login = () => {
-        axios.post(`http://localhost:9001/User/Login`, credentials)
+        axios.post(`${API}/User/Login`, credentials)
         .then(response => {
             if(response.data.message === "Login successfull",{autoClose:2500}){
                 toast.success(response.data.message)
