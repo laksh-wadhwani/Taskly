@@ -7,6 +7,9 @@ import Sidebar from './Components/sidebar';
 import Tasks from './Screens/task';
 import SpecificTask from './Screens/specificTask';
 import { BackendProvider } from './BackendContext';
+import Overview from './Screens/overview';
+import Settings from './Screens/settings';
+import ProfileBar from './Components/profilebar';
 
 function App() {
 
@@ -25,9 +28,12 @@ function App() {
         {(user && user._id)?
         (<>
         <Sidebar user={user}/>
+        <ProfileBar/>
         <Routes>
+          <Route exact path='/Overview' element={<Overview user={user}/>}/>
           <Route exact path='/Tasks' element={<Tasks user={user}/>}/>
           <Route exact path='/SpecificTask/:id' element={<SpecificTask/>}/>
+          <Route exact path='/Settings' element={<Settings/>}/>
         </Routes>
         </>)
         :

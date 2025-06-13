@@ -4,9 +4,7 @@ p{
 }
 
 .main-boxx{
-    width: 84%;
-    height: 100vh;
-    float: right;
+    width: 69%;
     box-sizing: border-box;
     padding: 5rem 2.5rem;
     display: flex;
@@ -19,6 +17,8 @@ p{
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    padding: 0 3.5rem 0px 0;
+    box-sizing: border-box;
 }
 
 .upper-bar > div > h5{

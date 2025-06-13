@@ -1,0 +1,88 @@
+.profile-bar{
+    background-color: white;
+    width: 16%;
+    height: 95vh;
+    margin-right: 1.5rem;
+    box-shadow: 10px 10px 36px -30px rgb(0 0 0 / 8%);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 1rem;
+    position: fixed;
+    right: 0;
+    top: 1rem;
+}
+
+.basic-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.basic-info > img{
+    width: 90px;
+    height: 90px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.basic-info > button{
+    width: 7rem;
+}
+
+.basic-info > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.basic-info > div > h4{
+    color: #101C56;
+    font-size: medium;
+    font-family: auto;
+    text-transform: capitalize;
+}
+
+.basic-info > div > span{
+    font-size: small;
+    font-family: auto;
+    text-transform: lowercase;
+    color: #666666;
+}
+
+.calendar-wrapper{
+    background-color: #F5F7FE;
+    border: 1px solid #B7B9C5;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.react-calendar{
+    border: none;
+    background-color: transparent;
+}
+
+.react-calendar__month-view__weekdays{
+    text-transform: capitalize;
+    color: #666666;
+}
+
+.react-calendar__tile--now{
+    background: #3755DB;
+    border-radius: 8px;
+}
+
+.react-calendar__tile--now:enabled:hover{
+    background: #596fce;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth{
+    color: #BFBFBF;
+}
+
+abbr{
+    text-decoration: none;
+}

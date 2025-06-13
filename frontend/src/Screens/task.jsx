@@ -61,7 +61,6 @@ const Tasks = ({user}) => {
 
     return(
         <React.Fragment>
-            {console.log(taskDetails)}
             <Modal open={open} onClose={() => setOpen(false)} center>
                 <div className="task-form">
                     <span>Create Task</span>

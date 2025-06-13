@@ -3,16 +3,39 @@
     height: 100vh;
     display: flex;
     position: fixed;
+    left: 0;
+    top: 0;
 }
 
-.overall-sidebar > div:nth-child(1){
-    width: 25%;
+.chotu-sidebar{
+    width: 30%;
     height: 100%;
     background-color: #3754DB;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-placeholder{
+    width: 48px;
+    height: 48px;
+    border: 2.3px solid #FBBE37;
+    border-radius: 12px;
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-placeholder > div{
+    width: 38px;
+    height: 38px;
+    background-color: white;
+    border-radius: 10px;
 }
 
 .actual-sidebar{
-    width: 75%;
+    width: 70%;
     height: 100%;
     background-color: white;
     box-shadow: 1px 0px 10px rgb(0 0 0 / 15%);
@@ -61,4 +84,18 @@
 .active-btn > button {
     color: #3754DB !important;
     font-weight: bold;
-  }
+    position: relative;
+}
+
+.active-btn > button::before {
+    content: "";
+    position: absolute;
+    left: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%) rotateY(180deg);
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #3754DB;
+}
