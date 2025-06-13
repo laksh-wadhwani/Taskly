@@ -1,22 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "./sidebar.css";
 import overviewww from "../assets/overviewww.svg"
 import tasks from "../assets/tasks.svg"
 import setting from "../assets/setting.svg"
-import { NavLink,useNavigate } from "react-router";
-import logout from "../assets/logout.svg"
+import { NavLink } from "react-router";
+import Menu from "../assets/menu.svg"
 
-const Sidebar = ({user, setLoginUser}) => {
+const Sidebar = ({user}) => {
 
-    const navigate = useNavigate();
-    const Logout = () => {
-        setLoginUser({})
-        navigate("/")
-    }
+    const [isOpen, setIsOpen] = useState(true)
 
     return(
         <React.Fragment>
-            <div className="overall-sidebar">
+            <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
+                <img src={Menu} alt="Hamburger" />
+            </button>
+            <div className={`overall-sidebar ${isOpen ? "show-sidebar" : "hide-sidebar"}`}>
                 <div className="chotu-sidebar">
                     <div className="profile-placeholder">
                         <div><img src={user.profile? `${user.profile}`:``} alt="" /></div>

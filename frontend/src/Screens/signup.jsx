@@ -70,10 +70,9 @@ const SignUp = ({setLoginUser}) => {
     return(
         <React.Fragment>
            <div className="main-box">
-
-           <button className={`toggleButton ${toggleForm? "signup":"login"}`} onClick={() => setToggle(!toggleForm)}>{toggleForm ? "Create Account" : "Log In"}</button>
-
             <div className="sign-box">
+                <button className={`toggleButton ${toggleForm? "signup":"login"}`} onClick={() => setToggle(!toggleForm)}>{toggleForm ? "Create Account" : "Log In"}</button>
+
                 <div className={`${toggleForm ? "slide" : ""}`}>
                     <h5>Boost your<br/>productivity with<br/>smarter task management</h5>
                 </div>

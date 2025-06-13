@@ -86,3 +86,33 @@
 abbr{
     text-decoration: none;
 }
+
+@media screen and (max-width: 1024px) {
+    .profile-bar {
+        width: 20%;
+        padding: 0 0.5rem;
+    }
+
+    .basic-info > img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .basic-info > button {
+        width: 6rem;
+    }
+
+    .basic-info > div > h4 {
+        font-size: small;
+    }
+
+    .basic-info > div > span {
+        font-size: x-small;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile-bar{
+        display: none;
+    }
+}

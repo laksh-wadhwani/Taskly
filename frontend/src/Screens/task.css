@@ -4,12 +4,13 @@ p{
 }
 
 .main-boxx{
-    width: 69%;
+    width: 80%;
     box-sizing: border-box;
     padding: 5rem 2.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    float: right;
 }
 
 .upper-bar{
@@ -240,4 +241,66 @@ p{
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .main-boxx {
+    width: 80%;
+    padding: 4rem 1rem;
+    gap: 1rem;
+  }
+
+  .tasks-list {
+    gap: 1rem;
+  }
+
+  .task {
+    width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-boxx {
+    width: 70%;
+    gap: 1rem;
+  }
+
+  .upper-bar {
+    padding: 0;
+  }
+
+  .upper-bar > div > h5 {
+    font-size: x-large;
+  }
+
+  .upper-bar > div > span {
+    font-size: small;
+  }
+
+  .task-create-btn {
+    width: 20%;
+    font-size: small;
+    height: 2.5rem;
+  }
+
+  .tasks-list {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .task {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .task > div > span,
+  .task > div > p,
+  .task > p,
+  .task > button {
+    font-size: small;
+  }
+
+  .task > button {
+    padding: 0.4rem;
+  }
 }

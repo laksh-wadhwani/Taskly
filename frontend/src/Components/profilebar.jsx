@@ -41,9 +41,9 @@ const ProfileBar = ({user}) => {
                     <button className="task-create-btn" onClick={() => navigate("/Settings")}>My Profile</button>
                 </div>
 
-                <div className="calendar-wrapper">
+                {/* <div className="calendar-wrapper">
                     <Calendar/>
-                </div>
+                </div> */}
             </div>
 
             <Modal open={open} onClose={() => setOpen(false)} center>
