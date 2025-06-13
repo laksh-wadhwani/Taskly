@@ -3,7 +3,8 @@ import { createContext, useContext } from "react";
 export const BackendContext = createContext();
 
 export const BackendProvider = ({children}) => {
-    const backendURL = "http://localhost:9001";
+    const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:9001";
+    console.log("Loaded backendURL:", backendURL);
 
     return(
         <BackendContext.Provider value={backendURL}>
