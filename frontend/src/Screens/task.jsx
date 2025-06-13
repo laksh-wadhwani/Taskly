@@ -20,6 +20,29 @@ const Tasks = ({user}) => {
         description :""
     })
 
+    const getStatusCounts = () => {
+        const counts = {
+            AllTasks: taskDetails.length,
+            "To Do": taskDetails.filter(task => task.status === "To Do").length,
+            "In Progress": taskDetails.filter(task => task.status === "In Progress").length,
+            "Done": taskDetails.filter(task => task.status === "Done").length
+        }
+        return counts
+    }
+
+    const [activeFilter, setActiveFilter] = useState("AllTasks");
+
+    const filteredTasks = taskDetails.filter(task => {
+        if (activeFilter === "AllTasks") return true;
+        if (activeFilter === "Pending") return task.status === "To Do";
+        if (activeFilter === "Completed") return task.status === "Done";
+        return task.status === activeFilter;
+    });
+
+    const handleFilterClick = (filter) => {
+        setActiveFilter(filter);
+    };
+
     const handleChange = eventTriggered => {
         const {name, value} = eventTriggered.target;
         setTask({
@@ -91,13 +114,25 @@ const Tasks = ({user}) => {
                     <button onClick={() => setOpen(true)} className="task-create-btn">Create Task</button>
                 </div>
 
+                <div className="status-bar">
+                    {Object.entries(getStatusCounts()).map(([status, count]) => (
+                        <button
+                            key={status}
+                            className={`status-btn ${activeFilter === status ? "active" : ""}`}
+                            onClick={() => handleFilterClick(status)}
+                        >
+                            {status}: {count}
+                        </button>
+                    ))}
+                </div>
+
                 <div className="tasks-list">
 
-                    {taskDetails.map((task, index) => (
-                        <div className="task" key={task._id}>
+                    {filteredTasks.map((task, index) => (
+                        <div className="task" key={task._id} data-status={task.status}>
                             <div>
                                 <span>T-{index+1}</span>
-                                <p>{task.status}</p>
+                                <p data-status={task.status}>{task.status}</p>
                             </div>
                             <p>{task.name}</p>
                             <button onClick={() => ViewTask(task)}>

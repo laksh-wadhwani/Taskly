@@ -19,7 +19,7 @@ const Sidebar = ({user, setLoginUser}) => {
             <div className="overall-sidebar">
                 <div className="chotu-sidebar">
                     <div className="profile-placeholder">
-                        <div></div>
+                        <div><img src={user.profile? `${user.profile}`:``} alt="" /></div>
                     </div>
                 </div>
                 <div className="actual-sidebar">

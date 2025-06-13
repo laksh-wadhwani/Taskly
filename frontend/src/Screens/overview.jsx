@@ -30,7 +30,7 @@ const Overview = ({user}) => {
             <div className="main-boxx">
                <div className="upper-bar">
                     <div>
-                        <h5>HI Laksh</h5>
+                        <h5>Hi {user.fullname}</h5>
                         <span>Welcome Back!..</span>
                     </div>
                </div>

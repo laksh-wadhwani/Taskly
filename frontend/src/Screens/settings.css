@@ -2,3 +2,56 @@
     background-color:#B80020;
     width:6rem;
 }
+
+.logout-modal{
+    width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-sizing: border-box;
+    padding: 1rem;
+}
+
+.logout-modal > div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.logout-modal > div > span{
+    font-size: larger;
+    font-family: auto;
+    font-weight: bold;
+}
+
+.logout-modal > div > span:nth-child(2){
+    color: #8C8C8C;
+    font-weight: 100;
+    font-size: medium;
+    width: 80%;
+}
+
+.logout-modal > div:nth-child(2){
+    flex-direction: row;
+    gap: 1.4rem;
+}
+
+.logout-modal > div > button{
+    padding: 1rem 1.5rem;
+    border-radius: 0.8rem;
+    border: none;
+    background-color: #3754DB;
+    color: white;
+    font-family: auto;
+    font-size: medium;
+    transition: all 0.5s ease-in-out;
+}
+
+.logout-modal > div > button:nth-child(2){
+    background-color: #FFF0F0;
+    color: #B80020;
+}
+
+.logout-modal > div > button:hover{
+    transform: scale(1.05);
+}

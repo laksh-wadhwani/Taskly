@@ -1,5 +1,7 @@
+const { request, response } = require("express");
 const TaskModel = require("../Models/Tasks");
 const UserModel = require("../Models/User");
+const {uploadToCloudinary} = require("../utils/cloudinary")
 const { EncryptPassword, DecryptPassword } = require("../utils/hash");
 
 const Signup = async(request, response) => {
@@ -23,9 +25,29 @@ const Signup = async(request, response) => {
     }
 }
 
+const UploadProfile = async(request, response) => {
+    const {email} = request.params
+    const profile = await uploadToCloudinary(request?.file.buffer)
+    const userCheck = await UserModel.findOne({email})
+    try{
+        if(!userCheck)
+            return response.send({message: "User doesn't exist"})
+        else{
+            if(profile) userCheck.profile = profile
+            await userCheck.save();
+            return response.send({message: "Profile Picture Uploaded"})
+        }
+
+    }catch(error){
+        response.send({message: "Internal Server Error"})
+        return console.log("Error in uploading picture: ", error)
+    }
+}
+
 const Login = async(request, response) => {
     const {email, password} = request.body
     const userCheck = await UserModel.findOne({email})
+    console.log(userCheck)
 
     try{
         if(!(email && password))
@@ -156,4 +178,4 @@ const UpdateTaskStatus = async (request, response) => {
     }
 };
 
-module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus}
+module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile}

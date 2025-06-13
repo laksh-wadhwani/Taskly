@@ -1,5 +1,5 @@
 .task-view-list{
-    width: 100%;
+    width: 95%;
     display: flex;
     flex-direction: column;
 }
@@ -61,4 +61,65 @@
 .action-buttons:hover{
     transform: scale(1.05);
     cursor: pointer;
+}
+
+/* Add these new styles */
+.task-status-btn {
+    border-radius: 0.9rem;
+    padding: 0.7rem 1.5rem;
+    font-family: auto;
+    font-size: medium;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+}
+
+.status-btn-pending {
+    background-color: #FF9800; /* Orange for Pending */
+}
+
+.status-btn-pending:hover {
+    background-color: #F57C00;
+}
+
+.status-btn-inprogress {
+    background-color: #2196F3; /* Blue for In Progress */
+}
+
+.status-btn-inprogress:hover {
+    background-color: #1976D2;
+}
+
+.status-btn-completed {
+    background-color: #4CAF50; /* Green for Completed */
+    cursor: not-allowed;
+}
+
+/* Update status tag styling to match */
+.task-details > div > p:nth-child(2) {
+    border-radius: 0.8rem;
+    padding: 0.5rem 1rem;
+    font-family: auto;
+    font-size: medium;
+    width: fit-content;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.task-details > div > p[data-status="To Do"] {
+    background: #FFF3E0;
+    color: #FF9800;
+}
+
+.task-details > div > p[data-status="In Progress"] {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.task-details > div > p[data-status="Done"] {
+    background: #E8F5E9;
+    color: #388E3C;
 }

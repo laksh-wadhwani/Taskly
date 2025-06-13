@@ -55,7 +55,7 @@ const SignUp = ({setLoginUser}) => {
                 toast.success(response.data.message)
                 setTimeout(() => {
                     setLoginUser(response.data.user)
-                    navigate(`/Tasks`)
+                    navigate(`/Overview`)
                 },2500)
                 return
             }

@@ -88,6 +88,34 @@ const SpecificTask = () => {
             });
     };
 
+    const getStatusButtonProps = (status) => {
+        switch(status) {
+            case "To Do":
+                return {
+                    text: "Work on it now",
+                    className: "status-btn-pending",
+                    nextStatus: "In Progress"
+                };
+            case "In Progress":
+                return {
+                    text: "Mark as completed",
+                    className: "status-btn-inprogress",
+                    nextStatus: "Done"
+                };
+            case "Done":
+                return {
+                    text: "Task completed",
+                    className: "status-btn-completed",
+                    disabled: true
+                };
+            default:
+                return {
+                    text: "Update Status",
+                    className: "status-btn-default"
+                };
+        }
+    };
+
     return(
         <React.Fragment>
 
@@ -124,12 +152,18 @@ const SpecificTask = () => {
                         <div className="task-details">
                             <div>
                                 <p>{taskDetails.name}</p>
-                                <p>{taskDetails.status}</p>
+                                <p data-status={taskDetails.status}>{taskDetails.status}</p>
                             </div>
                             <p>{taskDetails.description}</p>
                             <p>{taskDetails.duration}</p>
                             <div>
-                                <button className="task-create-btn" onClick={() => UpdateStatus(taskDetails._id)} disabled={status === "Done"}>Change Status</button>
+                                <button 
+                                    className={`task-status-btn ${getStatusButtonProps(taskDetails.status).className}`}
+                                    onClick={() => UpdateStatus(taskDetails._id)}
+                                    disabled={status === "Done"}
+                                >
+                                    {getStatusButtonProps(taskDetails.status).text}
+                                </button>                                
                                 <button className="action-buttons" onClick={() => TaskDelete(taskDetails._id)} disabled={status === "Done"}><img src={deleteTask} alt="Delete Button" /></button>
                                 <button className="action-buttons" onClick={() => setOpen(true)} disabled={status === "Done"}><img src={editButton} alt="Edit Button" /></button>
                             </div>

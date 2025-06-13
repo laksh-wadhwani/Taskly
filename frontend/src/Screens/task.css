@@ -168,3 +168,76 @@ p{
     background-color: #3754db12;
     transform: scale(1.02);
 }
+
+.status-bar {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.status-btn {
+    font-family: auto;
+    font-size: medium;
+    color: #3754DB;
+    background: #f0f2ff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-btn:hover {
+    background: #d9dfff;
+}
+
+.status-btn.active {
+    background: #3754DB;
+    color: white;
+}
+
+.task[data-status="To Do"] {
+    border-left: 4px solid #FFA500; 
+}
+
+.task[data-status="In Progress"] {
+    border-left: 4px solid #3754DB; 
+}
+
+.task[data-status="Done"] {
+    border-left: 4px solid #4CAF50;
+}
+
+.task > div > p {
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.task > div > p[data-status="To Do"] {
+    background: #FFF3E0;
+    color: #FF9800;
+}
+
+.task > div > p[data-status="In Progress"] {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.task > div > p[data-status="Done"] {
+    background: #E8F5E9;
+    color: #388E3C;
+}
+
+.task > div > p[data-status] {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
