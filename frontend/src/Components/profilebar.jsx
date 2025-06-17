@@ -30,30 +30,7 @@ const ProfileBar = ({user}) => {
 
     return(
         <React.Fragment>
-            {console.log(user)}
-            <div className="profile-bar">
-                <div className="basic-info">
-                    <img src={user.profile? `${user.profile}`:`${profileIcon}`} alt="Profile" onClick={() => setOpen(true)}/>
-                    <div>
-                        <h4>{user.fullname}</h4>
-                        <span>{user.email}</span>
-                    </div>
-                    <button className="task-create-btn" onClick={() => navigate("/Settings")}>My Profile</button>
-                </div>
-
-                {/* <div className="calendar-wrapper">
-                    <Calendar/>
-                </div> */}
-            </div>
-
-            <Modal open={open} onClose={() => setOpen(false)} center>
-                <div className="task-form">
-                    <span>Upload your Profile Picture</span>
-                    <input type="file" onChange={(event) => setProfile(event.target.files[0])} />
-                    <button onClick={UploadProfile} className="task-create-btn">Upload Picture</button>
-                </div>
-            </Modal>
-
+            <div className="profile-bar"></div>
         </React.Fragment>
     )
 }

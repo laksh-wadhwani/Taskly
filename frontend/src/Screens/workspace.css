@@ -1,0 +1,6 @@
+.inputs > div > textarea{
+    width: 90%;
+    height: 6rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+}

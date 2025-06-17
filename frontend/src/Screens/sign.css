@@ -54,11 +54,8 @@ h5{
 }
 
 .inputs{
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 .slide-form{
@@ -85,6 +82,18 @@ h5{
 
 .inputs > div:nth-child(2){
     gap: 1rem;
+}
+
+.inputs > div:nth-child(3){
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.inputs > div:nth-child(3) > input{
+    width: 8%;
+    height: 8%;
+    padding: 1.3rem 1rem;
+    text-align: center;
 }
 
 .inputs > div > input{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./sign.css";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,48 +10,78 @@ const SignUp = ({setLoginUser}) => {
     const API = BackendURL();
     const navigate = useNavigate();
     const [toggleForm, setToggle] = useState(false)
+    const [otpInput, setOtpInput] = useState(false)
     const [credentials, setCredentials] = useState({
         fullname: "",
         email: "",
-        password: ""
+        password: "",
+        c: "",
+        o: "",
+        d: "",
+        e: ""
     })
+    const {c, o , d, e, email} = credentials
+    const finalOtp = c+o+d+e;
 
-    const handleChange = eventTriggered => {
+    const cRef = useRef(null)
+    const oRef = useRef(null)
+    const dRef = useRef(null)
+    const eRef = useRef(null)
+
+    const handleChange = (eventTriggered, nextRef) => {
         const {name, value} = eventTriggered.target
         setCredentials({
             ...credentials,
             [name]: value
         })
+
+        if(name==="c" || name==="o" || name==="d" || name==="e" )
+            if(value.length === 1 && nextRef.current)
+                nextRef.current.focus();
     }
 
     const CreateAccount = () => {
         axios.post(`${API}/User/Signup`, credentials)
         .then(response => {
-            if(response.data.message === "You are registered successfully"){
-                toast.success(response.data.message, {autoClose:2500})
+            if(response.data.message === "Please enter your OTP to get registered. We have sent it to your email."){
+                setOtpInput(true)
+                return toast.success(response.data.message)
+            }
+            return toast.error(response.data.message)
+        })
+        .catch(error => {
+            console.error("Getting error in registering user",error)
+            return toast.error("Something went wrong....")
+        })
+    }
+
+    const Verify = () => {
+        axios.put(`${API}/User/VerifyOTP`,{finalOtp, email})
+        .then(response => {
+            if(response.data.message === "User has been registered successfully"){
                 setTimeout(() => {
                     setToggle(true)
                     setCredentials({
-                        fullname: "",
+                        fullname:"",
                         email: "",
                         password: ""
                     })
-                }, 2500);
-                return
+                    setOtpInput(false)
+                },2500)
+                return toast.success(response.data.message, {autoClose:2500})
             }
-            toast.error(response.data.message)
-
+            return toast.error(response.data.message)
         })
         .catch(error => {
-            toast.error(error?.response?.data.message || "Something went wrong.....")
-            console.error("Getting error in signing up: ",error)
+            console.error("Getting error in verifying otp"+error)
+            return toast.error(response.data.message)
         })
     }
 
     const Login = () => {
         axios.post(`${API}/User/Login`, credentials)
         .then(response => {
-            if(response.data.message === "Login successfull",{autoClose:2500}){
+            if(response.data.message === "Login successfull",{autoClose:2000}){
                 toast.success(response.data.message)
                 setTimeout(() => {
                     setLoginUser(response.data.user)
@@ -99,8 +129,25 @@ const SignUp = ({setLoginUser}) => {
                             <input name="email" value={credentials.email} type="email" placeholder="Email" onChange={handleChange} />
                             <input name="password" value={credentials.password} type="password" placeholder="Password" onChange={handleChange} />
                         </div>
-                        
+
+                        {otpInput? 
+                        (<>
+                         <div className="otp-box">
+                            <input type="text" name="c" value={credentials.c} onChange={e => handleChange(e, oRef)} ref={cRef} maxLength={1}/>
+                            <input type="text" name="o" value={credentials.o} onChange={e => handleChange(e, dRef)} ref={oRef} maxLength={1}/>
+                            <input type="text" name="d" value={credentials.d} onChange={e => handleChange(e, eRef)} ref={dRef} maxLength={1}/>
+                            <input type="text" name="e" value={credentials.e} onChange={handleChange} ref={eRef} maxLength={1}/>
+                        </div>
+                        </>):null}
+
+                        {otpInput? 
+                        (<>
+                        <button onClick={Verify}>Verify</button>
+                        </>)
+                        :
+                        (<>
                         <button onClick={CreateAccount}>Create Account</button> 
+                        </>)}
                     </>}
                 </div>
             </div>

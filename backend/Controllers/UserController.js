@@ -3,25 +3,73 @@ const TaskModel = require("../Models/Tasks");
 const UserModel = require("../Models/User");
 const {uploadToCloudinary} = require("../utils/cloudinary")
 const { EncryptPassword, DecryptPassword } = require("../utils/hash");
+const GenerateOTP = require("../utils/OTP");
+const transporter = require("../Middleware/Mail");
 
 const Signup = async(request, response) => {
     const {fullname, email, password} = request.body;
+    const OTP = GenerateOTP();
+    const otpExpiry = new Date(Date.now() + 1 * 60 * 1000);
     const securePass = await EncryptPassword(password)
-    const newUser = new UserModel({fullname, email, password:securePass})
+    const newUser = new UserModel({fullname, email, password:securePass, OTP, otpExpiry})
     const userCheck = await UserModel.findOne({email})
     try {
         if(!(fullname && email && password))
             return response.status(400).send({message: "All fields are required"})
             
         if(userCheck)
-            return response.status(409).send({message: "User already registered"})  
-
+            return response.status(409).send({message: "User already registered"}) 
+        
+        const mailOptions = {
+            from: process.env.SMTP_MAIL,
+            to: email,
+            subject: "Your OTP for Taskly",
+            text: `Your OTP is ${OTP}`
+        }
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error) console.log("Error in sending OTP"+error)
+            else console.log("OTP Sent: "+OTP)
+        })
         await newUser.save();
-        return response.status(201).send({message: "You are registered successfully"})
+
+        setTimeout(async() => {
+            const user = await UserModel.findOne({email})
+            if(user && user.isVerified===false){
+                await UserModel.findOneAndDelete({email})
+                console.log("User deleted due to otp expiration")
+            }
+        },otpExpiry - Date.now())
+
+        return response.status(201).send({message: "Please enter your OTP to get registered. We have sent it to your email."})
     } 
     catch (error) {
         console.log("Getting error in posting user: ", error)
         return response.status(500).send({message: "Internal Server Error"})    
+    }
+}
+
+const VerifyOTP = async(request, response) => {
+    const {email, finalOtp} = request.body
+    const userCheck = await UserModel.findOne({email})
+    try{
+        if(!userCheck)
+            return response.send("User doesn't exist")
+        else{
+            if(userCheck.OTP===finalOtp){
+                userCheck.OTP = null;
+                userCheck.otpExpiry = null
+                userCheck.isVerified = true
+                await userCheck.save();
+                return response.send({message:"User has been registered successfully"})
+            }
+
+            await userCheck.findOneAndDelete({email})
+            return response.send({message: "You entered wrong OTP"})
+        }
+    }
+    catch{
+        console.log("Getting error in verifying OTP: ",error)
+        return response.send({message: "Internal Server Error"})
     }
 }
 
@@ -178,4 +226,4 @@ const UpdateTaskStatus = async (request, response) => {
     }
 };
 
-module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile}
+module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP}

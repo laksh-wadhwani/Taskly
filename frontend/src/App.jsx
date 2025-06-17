@@ -10,6 +10,7 @@ import { BackendProvider } from './BackendContext';
 import Overview from './Screens/overview';
 import Settings from './Screens/settings';
 import ProfileBar from './Components/profilebar';
+import Workspace from './Screens/workspace';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
         {(user && user._id)?
         (<>
         <Sidebar user={user}/>
+        {/* <ProfileBar user={user}/> */}
         <Routes>
           <Route exact path='/Overview' element={<Overview user={user}/>}/>
           <Route exact path='/Tasks' element={<Tasks user={user}/>}/>
