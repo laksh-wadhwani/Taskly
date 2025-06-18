@@ -29,11 +29,11 @@ function App() {
         {(user && user._id)?
         (<>
         <Sidebar user={user}/>
-        {/* <ProfileBar user={user}/> */}
+        <ProfileBar user={user} setLoginUser={setLoginUser}/>
         <Routes>
           <Route exact path='/Overview' element={<Overview user={user}/>}/>
           <Route exact path='/Tasks' element={<Tasks user={user}/>}/>
-          <Route exact path='/SpecificTask/:id' element={<SpecificTask/>}/>
+          <Route exact path='/SpecificTask/:id' element={<SpecificTask user={user}/>}/>
           <Route exact path='/Settings' element={<Settings setLoginUser={setLoginUser}/>}/>
         </Routes>
         </>)

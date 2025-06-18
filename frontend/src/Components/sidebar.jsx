@@ -16,11 +16,17 @@ const Sidebar = ({user}) => {
                 <img src={Menu} alt="Hamburger" />
             </button>
             <div className={`overall-sidebar ${isOpen ? "show-sidebar" : "hide-sidebar"}`}>
+
                 <div className="chotu-sidebar">
                     <div className="profile-placeholder">
-                        <div><img src={user.profile? `${user.profile}`:``} alt="" /></div>
+                        {user.profile? 
+                        <img src={user.profile} alt="User Profile"/>
+                        :
+                        <div/>
+                        }
                     </div>
                 </div>
+                
                 <div className="actual-sidebar">
 
                     <div>

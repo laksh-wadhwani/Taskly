@@ -11,11 +11,8 @@ const Settings = ({setLoginUser}) => {
     
 
     const Logout = () => {
-        toast.success("Logged Out", {autoClose:1000})
-        setTimeout(() => {
-            setLoginUser("")
-            navigate("/")
-        },1000)
+        setLoginUser("")
+        navigate("/")
     }
 
     return(

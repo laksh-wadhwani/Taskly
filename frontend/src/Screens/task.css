@@ -4,13 +4,12 @@ p{
 }
 
 .main-boxx{
-    width: 80%;
+    width: 70%;
     box-sizing: border-box;
-    padding: 5rem 2.5rem;
+    padding: 4.5rem 3.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    float: right;
 }
 
 .upper-bar{
@@ -32,6 +31,29 @@ p{
     font-family: auto;
     font-size: medium;
     color: #666666;
+}
+
+.no-task{
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.no-task > h5{
+    font-family: auto;
+    font-size: x-large;
+    margin-top: 1rem;
+}
+
+.no-task > span{
+    color: #6D6C6C;
+    font-family: auto;
+    font-size: medium;
+    text-align: center;
 }
 
 .task-create-btn{
@@ -93,6 +115,71 @@ p{
     border-radius: 0.9rem;
     border: 0.7px solid #A8ABBD;
     height: 5rem;
+}
+
+.task-share > div{
+    display: flex;
+    gap: 10px;
+}
+
+.task-share > div > label{
+    display: flex;
+    font-family: auto;
+}
+
+#render-users{
+    gap: 1rem;
+    max-height: 10rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+    cursor: pointer;
+}
+
+#render-users:hover{
+    /* border: 1px solid black; */
+    transform: scale(1.02);
+}
+
+#render-users > div{
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+#render-users > div > img{
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+}
+
+#render-users > div > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: auto;
+    font-size: large;
+}
+
+#render-users > div > div > span{
+    color: #666666;
+    font-size: small;
+}
+
+#selected-users{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.7rem;
+    width: 15rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+#selected-users > img{
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 0.5rem;
 }
 
 .react-responsive-modal-modal{

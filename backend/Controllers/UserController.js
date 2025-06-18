@@ -83,7 +83,7 @@ const UploadProfile = async(request, response) => {
         else{
             if(profile) userCheck.profile = profile
             await userCheck.save();
-            return response.send({message: "Profile Picture Uploaded"})
+            return response.send({message: "Profile Picture Uploaded", user:userCheck})
         }
 
     }catch(error){
@@ -95,7 +95,6 @@ const UploadProfile = async(request, response) => {
 const Login = async(request, response) => {
     const {email, password} = request.body
     const userCheck = await UserModel.findOne({email})
-    console.log(userCheck)
 
     try{
         if(!(email && password))
@@ -120,9 +119,10 @@ const Login = async(request, response) => {
 
 const AddTask = async(request, response) => {
     const {userId} = request.params;
-    const {name, duration, description} = request.body;
-    const newTask = new TaskModel({userId, name, duration, description})
-    const taskCheck = await TaskModel.findOne({userId, name})
+    const {name, duration, description, sharedWith} = request.body;
+    const shared_users = (sharedWith || []).map(userID => ({ userID }))
+    const newTask = new TaskModel({admin_userid:userId, name, duration, description, shared_users})
+    const taskCheck = await TaskModel.findOne({admin_userid:userId, name})
 
     try {
         if(!(name && duration && description))
@@ -142,7 +142,9 @@ const AddTask = async(request, response) => {
 const GetTasks = async (request, response) => {
     const userId = request.params.id;
     try {
-        const tasks = await TaskModel.find({ userId });
+        const owned = await TaskModel.find({ admin_userid:userId });
+        const shared = await TaskModel.find({"shared_users.userID":userId})
+        const tasks = [...owned, ...shared]
 
         const formattedTasks = tasks.map(task => {
             const formattedDate = new Date(task.duration).toLocaleDateString("en-US", {
@@ -204,6 +206,15 @@ const EditTask =  async(request, response) => {
     }
 }
 
+const SearchUser = async(request, response) => {
+    const {query, email} = request.query
+    const users = await UserModel.find({
+        fullname: {$regex: query, $options: 'i'},
+        email: { $ne: email }
+    }).select("fullname email profile")
+    response.send(users)
+}
+
 const UpdateTaskStatus = async (request, response) => {
     const taskId = request.params.id;
     try {
@@ -226,4 +237,4 @@ const UpdateTaskStatus = async (request, response) => {
     }
 };
 
-module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP}
+module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser}

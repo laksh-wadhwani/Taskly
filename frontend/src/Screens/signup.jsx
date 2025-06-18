@@ -27,6 +27,7 @@ const SignUp = ({setLoginUser}) => {
     const oRef = useRef(null)
     const dRef = useRef(null)
     const eRef = useRef(null)
+    const toastId = useRef(null)
 
     const handleChange = (eventTriggered, nextRef) => {
         const {name, value} = eventTriggered.target
@@ -59,6 +60,7 @@ const SignUp = ({setLoginUser}) => {
         axios.put(`${API}/User/VerifyOTP`,{finalOtp, email})
         .then(response => {
             if(response.data.message === "User has been registered successfully"){
+                toast.success(response.data.message, {autoClose:2500})
                 setTimeout(() => {
                     setToggle(true)
                     setCredentials({
@@ -68,7 +70,7 @@ const SignUp = ({setLoginUser}) => {
                     })
                     setOtpInput(false)
                 },2500)
-                return toast.success(response.data.message, {autoClose:2500})
+                return
             }
             return toast.error(response.data.message)
         })
@@ -79,22 +81,31 @@ const SignUp = ({setLoginUser}) => {
     }
 
     const Login = () => {
+        toastId.current = toast.loading("Logging in...")
         axios.post(`${API}/User/Login`, credentials)
         .then(response => {
-            if(response.data.message === "Login successfull",{autoClose:2000}){
-                toast.success(response.data.message)
+            if(response.data.message === "Login successfull"){
+                toast.update(toastId.current, {render:response.data.message, type:"success", isLoading:false, autoClose:2500})
                 setTimeout(() => {
                     setLoginUser(response.data.user)
                     navigate(`/Overview`)
                 },2500)
                 return
             }
-            toast.error(response.data.message)
+            return toast.update(toastId.current, {render:response.data.message, type:"error", isLoading:false})
         })
         .catch(error => {
-            toast.error(error?.response?.data.message || "Something went wrong.....")
             console.error("Error getting logging in: ", error)
+            return toast.error(error?.response?.data.message || "Something went wrong.....")
         })
+    }
+
+    const handleKeyDown = event => {
+        if(event.key === "Enter"){
+            if(toggleForm) return Login();
+            if(otpInput) return Verify();
+            else return CreateAccount();
+        }
     }
 
     return(
@@ -107,7 +118,7 @@ const SignUp = ({setLoginUser}) => {
                     <h5>Boost your<br/>productivity with<br/>smarter task management</h5>
                 </div>
 
-                <div className={`inputs ${toggleForm? "slide-form" : ""}`}> 
+                <div className={`inputs ${toggleForm? "slide-form" : ""}`} onKeyDown={handleKeyDown}> 
                     <div>
                         <h5>{toggleForm? "Welcome Back":"Create an account"}</h5>
                         <span>{toggleForm? "Please enter your credentials":"It's Simple and Easy"}</span>
@@ -116,8 +127,8 @@ const SignUp = ({setLoginUser}) => {
                     {toggleForm? 
                     <>
                         <div>
-                            <input name="email" value={credentials.email} type="email" placeholder="Email" onChange={handleChange} />
-                            <input name="password" value={credentials.password} type="password" placeholder="Password" onChange={handleChange} />
+                            <input name="email" value={credentials.email} type="email" placeholder="Email" onChange={handleChange}/>
+                            <input name="password" value={credentials.password} type="password" placeholder="Password" onChange={handleChange}/>
                         </div>
                         
                         <button onClick={Login}>Login</button>
@@ -125,18 +136,18 @@ const SignUp = ({setLoginUser}) => {
                     :
                     <>
                         <div>
-                            <input name="fullname" value={credentials.fullname} type="text" placeholder="Fullname" onChange={handleChange} />
-                            <input name="email" value={credentials.email} type="email" placeholder="Email" onChange={handleChange} />
-                            <input name="password" value={credentials.password} type="password" placeholder="Password" onChange={handleChange} />
+                            <input name="fullname" value={credentials.fullname} type="text" placeholder="Fullname" onChange={handleChange} onKeyDown={handleKeyDown} />
+                            <input name="email" value={credentials.email} type="email" placeholder="Email" onChange={handleChange} onKeyDown={handleKeyDown} />
+                            <input name="password" value={credentials.password} type="password" placeholder="Password" onChange={handleChange} onKeyDown={handleKeyDown} />
                         </div>
 
                         {otpInput? 
                         (<>
                          <div className="otp-box">
-                            <input type="text" name="c" value={credentials.c} onChange={e => handleChange(e, oRef)} ref={cRef} maxLength={1}/>
-                            <input type="text" name="o" value={credentials.o} onChange={e => handleChange(e, dRef)} ref={oRef} maxLength={1}/>
-                            <input type="text" name="d" value={credentials.d} onChange={e => handleChange(e, eRef)} ref={dRef} maxLength={1}/>
-                            <input type="text" name="e" value={credentials.e} onChange={handleChange} ref={eRef} maxLength={1}/>
+                            <input type="text" name="c" value={credentials.c} onChange={e => handleChange(e, oRef)} ref={cRef} maxLength={1} onKeyDown={handleKeyDown}/>
+                            <input type="text" name="o" value={credentials.o} onChange={e => handleChange(e, dRef)} ref={oRef} maxLength={1} onKeyDown={handleKeyDown}/>
+                            <input type="text" name="d" value={credentials.d} onChange={e => handleChange(e, eRef)} ref={dRef} maxLength={1} onKeyDown={handleKeyDown}/>
+                            <input type="text" name="e" value={credentials.e} onChange={handleChange} ref={eRef} maxLength={1} onKeyDown={handleKeyDown}/>
                         </div>
                         </>):null}
 
