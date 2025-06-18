@@ -92,7 +92,7 @@ const SignUp = ({setLoginUser}) => {
                 },2500)
                 return
             }
-            return toast.update(toastId.current, {render:response.data.message, type:"error", isLoading:false})
+            return toast.update(toastId.current, {render:response.data.message, type:"error", isLoading:false, autoClose:2500})
         })
         .catch(error => {
             console.error("Error getting logging in: ", error)

@@ -5,6 +5,7 @@ const {uploadToCloudinary} = require("../utils/cloudinary")
 const { EncryptPassword, DecryptPassword } = require("../utils/hash");
 const GenerateOTP = require("../utils/OTP");
 const transporter = require("../Middleware/Mail");
+const TaskDetailsModel = require("../Models/TaskDetails");
 
 const Signup = async(request, response) => {
     const {fullname, email, password} = request.body;
@@ -216,25 +217,105 @@ const SearchUser = async(request, response) => {
 }
 
 const UpdateTaskStatus = async (request, response) => {
-    const taskId = request.params.id;
-    try {
-        const task = await TaskModel.findById(taskId);
-        if (!task) {
-            return response.status(404).send({ message: "Task not found" });
+    const {taskId, userId} = request.params;
+    const taskStatus = await TaskModel.findOne({_id:taskId})
+    const {status} = taskStatus
+    const {description, duration} = request.body;
+    const attachment = request.file? await uploadToCloudinary(request?.file.buffer):null
+    const taskCheck = await TaskDetailsModel.findOne({taskId, task_description:description})
+    const newTaskDetails = new TaskDetailsModel({taskId, userId, task_description:description, date:duration, attachment})
+    try{
+        if(taskStatus){
+            if(status === "To Do"){
+                taskStatus.status = "In Progress"
+                await taskStatus.save();
+            }
         }
+         if(!description)
+            return response.send({message: "Desciption is required"})
+        if(taskCheck)
+            return response.send({message: "You are doing changes in already commited task"})
+        await newTaskDetails.save();
+        return response.send({message: "Task has been updated successfully", status})
 
-        if (task.status === "To Do") {
-            task.status = "In Progress";
-        } else if (task.status === "In Progress") {
-            task.status = "Done";
-        }
-
-        await task.save();
-        return response.status(200).send({ message: "Task status updated", status: task.status });
-    } catch (error) {
-        console.error("Error in updating task status", error);
-        return response.status(500).send({ message: "Internal Server Error" });
+    }
+    catch(error){
+        console.log("Getting error in updating task details"+error)
+        return response.send({message: "Internal Server Error"})
     }
 };
 
-module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser}
+const GetTaskDetails = async (request, response) => {
+    const taskId = request.params.id;
+
+    try {
+        const taskDetails = await TaskDetailsModel.find({ taskId })
+            .populate({
+                path: "userId",
+                select: "fullname" 
+            });
+
+        const formattedTaskDetails = taskDetails.map(task => {
+            const formattedDate = new Date(task.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+
+            return {
+                ...task.toObject(),
+                date: formattedDate
+            };
+        });
+
+        response.status(200).send(formattedTaskDetails);
+    } catch (error) {
+        console.error("Error fetching task details:", error);
+        response.status(500).send({ message: "Internal Server Error" });
+    }
+};
+
+const GetSingleTask = async (req, res) => {
+    try {
+        const taskDetails = await TaskModel.findById(req.params.id);
+        if (!task) return res.status(404).send({ message: "Task not found" });
+        const formattedTaskDetails = taskDetails.map(task => {
+            const formattedDate = new Date(task.duration).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+
+            return {
+                ...task.toObject(),
+                duration: formattedDate
+            };
+        });
+
+        return res.status(200).send(formattedTaskDetails);
+    } catch (error) {
+        console.error("Error fetching single task: ", error);
+        return res.status(500).send({ message: "Internal Server Error" });
+    }
+};
+
+const CompleteTask = async(request, response) => {
+    const task = await TaskModel.findById(request.params.id)
+    const {status} = task
+    try{
+        if(!task)
+            return response.send({message: "Task not found"})
+
+        if(status === "In Progress"){
+            task.status = "Done"
+            await task.save();
+        }
+        return response.send({message: "Task has complted successfully"})
+    }
+    catch(error){
+        console.error("Error in completing task")
+        return response.send({message:"Internal Server Error"})
+    }
+}
+
+module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser, GetTaskDetails, GetSingleTask, CompleteTask}

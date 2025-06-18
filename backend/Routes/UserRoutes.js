@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../Middleware/multer")
 
-const { Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser } = require("../Controllers/UserController");
+const { Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser, GetTaskDetails, GetSingleTask, CompleteTask } = require("../Controllers/UserController");
 
 router.post("/Signup", Signup)
 router.put("/VerifyOTP", VerifyOTP)
@@ -13,6 +13,9 @@ router.get("/GetTasks/:id", GetTasks)
 router.delete("/DeleteTask/:id", DeleteTask)
 router.put("/EditTask/:id", EditTask)
 router.get("/SearchUser", SearchUser)
-router.put("/UpdateTaskStatus/:id", UpdateTaskStatus)
+router.post("/UpdateTaskStatus/:taskId/:userId", upload.single("Attachment"), UpdateTaskStatus)
+router.get("/GetTaskDetails/:id", GetTaskDetails)
+router.get("/GetSingleTask/:id", GetSingleTask)
+router.put("/CompleteTask/:id", CompleteTask)
 
 module.exports = router
