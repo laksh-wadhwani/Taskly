@@ -5,8 +5,6 @@ const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 
 const app = express();
-app.use(bodyParser.json())
-
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
@@ -24,6 +22,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
 }));
 app.options("*", cors()); // enable pre-flight for all routes
+app.use(bodyParser.json())
 
 dotenv.config()
 
