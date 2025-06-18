@@ -7,14 +7,24 @@ const dotenv = require('dotenv')
 const app = express();
 app.use(bodyParser.json())
 
-const allowedOrigins = [
-  "https://taskly-frontend-ochre.vercel.app", 
-  "http://localhost:5173",                  
-];
-
 app.use(cors({
-    origin: allowedOrigins, 
-}))
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://taskly-frontend-ochre.vercel.app",
+      "http://localhost:5173"
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // <== important if you're sending cookies or authentication headers
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow common methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
+}));
+app.options("*", cors()); // enable pre-flight for all routes
+
 dotenv.config()
 
 mongoose.connect(process.env.DB_URL)
