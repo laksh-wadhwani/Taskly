@@ -5,22 +5,26 @@ const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 
 const app = express();
+const allowedOrigins = [
+  "https://taskly-frontend-ochre.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      "https://taskly-frontend-ochre.vercel.app",
-      "http://localhost:5173"
-    ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow common methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.options("*", cors()); // enable pre-flight for all routes
+
+// Enable preflight for all routes
+app.options("*", cors());
 app.use(bodyParser.json())
 
 dotenv.config()
