@@ -82,7 +82,7 @@ const SignUp = ({setLoginUser}) => {
 
     const Login = () => {
     toastId.current = toast.loading("Logging in...");
-    axios.post(`${API}/User/Login`, credentials, {withCredentials: true})
+    axios.post(`${API}/User/Login`, credentials)
         .then(response => {
             if (response.data.message === "Login successfull") {
                 toast.update(toastId.current, {
