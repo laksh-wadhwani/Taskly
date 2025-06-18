@@ -6,9 +6,14 @@ const dotenv = require('dotenv')
 
 const app = express();
 app.use(bodyParser.json())
+
+const allowedOrigins = [
+  "https://taskly-frontend-ochre.vercel.app", 
+  "http://localhost:5173",                  
+];
+
 app.use(cors({
-    origin: "http://localhost:5173", 
-    credentials: true, 
+    origin: allowedOrigins, 
 }))
 dotenv.config()
 
