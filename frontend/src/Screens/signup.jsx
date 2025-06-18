@@ -81,24 +81,40 @@ const SignUp = ({setLoginUser}) => {
     }
 
     const Login = () => {
-        toastId.current = toast.loading("Logging in...")
-        axios.post(`${API}/User/Login`, credentials)
+    toastId.current = toast.loading("Logging in...");
+    axios.post(`${API}/User/Login`, credentials)
         .then(response => {
-            if(response.data.message === "Login successfull"){
-                toast.update(toastId.current, {render:response.data.message, type:"success", isLoading:false, autoClose:2500})
+            if (response.data.message === "Login successfull") {
+                toast.update(toastId.current, {
+                    render: response.data.message,
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 2500
+                });
                 setTimeout(() => {
-                    setLoginUser(response.data.user)
-                    navigate(`/Overview`)
-                },2500)
-                return
+                    setLoginUser(response.data.user);
+                    navigate(`/Overview`);
+                }, 2500);
+            } else {
+                toast.update(toastId.current, {
+                    render: response.data.message,
+                    type: "error",
+                    isLoading: false,
+                    autoClose: 2500
+                });
             }
-            return toast.update(toastId.current, {render:response.data.message, type:"error", isLoading:false, autoClose:2500})
         })
         .catch(error => {
-            console.error("Error getting logging in: ", error)
-            return toast.error(error?.response?.data.message || "Something went wrong.....")
-        })
-    }
+            console.error("Error getting logging in: ", error);
+            toast.update(toastId.current, {
+                render: error?.response?.data?.message || "Something went wrong...",
+                type: "error",
+                isLoading: false,
+                autoClose: 2500
+            });
+        });
+}
+
 
     const handleKeyDown = event => {
         if(event.key === "Enter"){
