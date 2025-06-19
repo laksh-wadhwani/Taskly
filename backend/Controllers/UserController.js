@@ -118,6 +118,30 @@ const Login = async(request, response) => {
     }
 }
 
+const UpdateUser = async(request, response) => {
+    const userid = request.params.id
+    const {fullname, email, password} = request.body
+    const securePass = await EncryptPassword(password)
+    const userCheck = await UserModel.findOne({_id: userid})
+    try{
+        if(!(fullname || email || password))
+            return response.send({message: "Atleast one field is required"})
+        if(!userCheck)
+            return response.send({message: "User Not Found"})
+        else{
+            if(fullname) userCheck.fullname = fullname
+            if(email) userCheck.email = email
+            if(password) userCheck.password = securePass
+            await userCheck.save();
+            return response.send({message: "Profile has been succesfully updated", user: userCheck})
+        }
+    }
+    catch(error){
+        console.error("Getting error in updating user")
+        return response.send({message: "Internal Server Error"})
+    }
+}
+
 const AddTask = async(request, response) => {
     const {userId} = request.params;
     const {name, duration, description, sharedWith} = request.body;
@@ -143,8 +167,12 @@ const AddTask = async(request, response) => {
 const GetTasks = async (request, response) => {
     const userId = request.params.id;
     try {
-        const owned = await TaskModel.find({ admin_userid:userId });
+        const owned = await TaskModel.find({ admin_userid:userId })
+        .populate("admin_userid", "profile")
+        .populate("shared_users.userID", "profile")
         const shared = await TaskModel.find({"shared_users.userID":userId})
+        .populate("admin_userid", "profile")
+        .populate("shared_users.userID", "profile")
         const tasks = [...owned, ...shared]
 
         const formattedTasks = tasks.map(task => {
@@ -277,7 +305,10 @@ const GetTaskDetails = async (request, response) => {
 
 const GetSingleTask = async (req, res) => {
     try {
-        const taskDetails = await TaskModel.findById(req.params.id);
+        const taskDetails = await TaskModel.findById(req.params.id)
+
+        console.log(taskDetails)
+       
         if (!task) return res.status(404).send({ message: "Task not found" });
         const formattedTaskDetails = taskDetails.map(task => {
             const formattedDate = new Date(task.duration).toLocaleDateString("en-US", {
@@ -318,4 +349,4 @@ const CompleteTask = async(request, response) => {
     }
 }
 
-module.exports = {Signup, Login, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser, GetTaskDetails, GetSingleTask, CompleteTask}
+module.exports = {Signup, Login, UpdateUser, AddTask, GetTasks, DeleteTask, EditTask, UpdateTaskStatus, UploadProfile, VerifyOTP, SearchUser, GetTaskDetails, GetSingleTask, CompleteTask}

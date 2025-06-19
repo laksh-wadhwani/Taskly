@@ -34,7 +34,7 @@ function App() {
           <Route exact path='/Overview' element={<Overview user={user}/>}/>
           <Route exact path='/Tasks' element={<Tasks user={user}/>}/>
           <Route exact path='/SpecificTask/:id' element={<SpecificTask user={user}/>}/>
-          <Route exact path='/Settings' element={<Settings setLoginUser={setLoginUser}/>}/>
+          <Route exact path='/Settings' element={<Settings user={user} setLoginUser={setLoginUser}/>}/>
         </Routes>
         </>)
         :

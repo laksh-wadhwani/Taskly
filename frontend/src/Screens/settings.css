@@ -55,3 +55,35 @@
 .logout-modal > div > button:hover{
     transform: scale(1.05);
 }
+
+.account-setting{
+    display: flex;
+    gap: 1.25rem;
+    flex-direction: column;
+}
+
+.account-setting > div{
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    border: 0.25px solid #B8B8B8;
+    border-radius: 1rem;
+    box-sizing: border-box;
+    padding: 1.5rem 1rem;
+}
+
+.account-setting > div > img{
+    width: 3rem;
+    height: 3rem;
+}
+
+.account-setting > div > div > label{
+    font-family: auto;
+    font-size: medium;
+    color: #545454
+}
+
+.account-setting > div > div > h5{
+    font-family: auto;
+    font-size: large;
+}

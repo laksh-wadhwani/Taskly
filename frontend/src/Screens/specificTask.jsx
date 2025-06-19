@@ -76,7 +76,7 @@ const SpecificTask = ({ user }) => {
             isLoading: false,
             autoClose: 2500,
           });
-          fetchUpdatedTask(); 
+          fetchUpdatedTask();
           setOpen1(false);
           return;
         }
@@ -88,29 +88,27 @@ const SpecificTask = ({ user }) => {
       });
   };
 
-  const CompleteTask = taskId => {
+  const CompleteTask = (taskId) => {
     toastId.current = toast.loading("Please Wait...");
-    axios.put(`${API}/User/CompleteTask/${taskId}`)
-    .then(response => {
-        if(response.data.message === "Task has complted successfully"){
-            toast.update(toastId.current, {
-            render: response.data.message,
-            type: "success",
-            isLoading: false,
-            autoClose: 2500,
-          });
-          fetchUpdatedTask(); 
-          setOpen1(false);
-          return;
-        }
-         toast.update(toastId.current, {
+    axios.put(`${API}/User/CompleteTask/${taskId}`).then((response) => {
+      if (response.data.message === "Task has complted successfully") {
+        toast.update(toastId.current, {
           render: response.data.message,
-          type: "error",
+          type: "success",
           isLoading: false,
+          autoClose: 2500,
         });
-    })
-    
-  }
+        fetchUpdatedTask();
+        setOpen1(false);
+        return;
+      }
+      toast.update(toastId.current, {
+        render: response.data.message,
+        type: "error",
+        isLoading: false,
+      });
+    });
+  };
 
   const TaskDelete = (taskID) => {
     axios
@@ -229,8 +227,28 @@ const SpecificTask = ({ user }) => {
             <span>{taskDetails.name}</span>
           </div>
         </div>
-
+        {console.log(taskDetails)}
         <div className="task-view-list">
+          <div className="edit-task">
+            <div className="users-shareAdmin">
+              <label>Admin: </label>
+              <div>
+                <img
+                  src={taskDetails.admin_userid.profile}
+                  alt="User Profile"
+                />
+              </div>
+            </div>
+            <div className="users-shareAdmin">
+              <label>Shared with: </label>
+              <div>
+                {taskDetails?.shared_users.map((user) => (
+                  <img src={user.userID.profile} alt="User Profile" />
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="edit-task">
             <div className="task-details">
               <div>
@@ -266,10 +284,8 @@ const SpecificTask = ({ user }) => {
               </div>
             </div>
           </div>
-        </div>
 
-        {updatedTaskDetails.map((details) => (
-          <div className="task-view-list">
+          {updatedTaskDetails.map((details) => (
             <div className="edit-task">
               <div className="task-details">
                 <div>
@@ -289,8 +305,8 @@ const SpecificTask = ({ user }) => {
                 )}
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <Modal open={open1} onClose={() => setOpen1(false)} center>
